@@ -35,6 +35,7 @@ export default async function LeaderboardPage() {
       id: user.id,
       name: user.name || "Anonymous",
       email: user.email,
+      // @ts-ignore
       avatar: user.image,
       points,
       competitionsCount: new Set(user.submissions.map(s => s.competitionId)).size,
