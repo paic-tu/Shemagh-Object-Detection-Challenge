@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  submissions Submission[]
+}
+
+model Competition {
+  id               String   @id @default(cuid())
+  title            String
+  description      String
+  deadline         DateTime
+  metric           Metric
+  trainDataPath    String // Path to the public training data file
+  solutionDataPath String // Path to the hidden solution file
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  submissions Submission[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Metric {
+  ACCURACY
+  MSE
+}
+
+model Submission {
+  id            String   @id @default(cuid())
+  score         Float
+  filePath      String // Path to the user's submission file
+  createdAt     DateTime @default(now())
+  
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  
+  competitionId String
+  competition   Competition @relation(fields: [competitionId], references: [id])
+}
