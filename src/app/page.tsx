@@ -1,9 +1,10 @@
-
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { CompetitionCard } from "@/components/CompetitionCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Trophy } from "lucide-react";
+
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const competitions = await prisma.competition.findMany({
